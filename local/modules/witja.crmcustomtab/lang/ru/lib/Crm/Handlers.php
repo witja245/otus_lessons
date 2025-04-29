@@ -1,0 +1,2 @@
+<?php
+$MESS['WITJA_CRMCUSTOMTAB_TAB_TITLE'] = 'Договоры';
