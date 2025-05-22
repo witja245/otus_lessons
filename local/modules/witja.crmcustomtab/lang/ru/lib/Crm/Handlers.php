@@ -1,2 +1,2 @@
 <?php
-$MESS['WITJA_CRMCUSTOMTAB_TAB_TITLE'] = 'Договоры';
+$MESS['WITJA_CRMCUSTOMTAB_TAB_TITLE'] = 'Договоры2222';

@@ -1,5 +1,5 @@
 <?php
-$MESS["WITJA_CUSTOMTAB_MODULE_NAME"] = "WITJA: Таб в контакте";
+$MESS["WITJA_CUSTOMTAB_MODULE_NAME"] = "WITJA: Таб в CRM";
 $MESS["WITJA_CUSTOMTAB_MODULE_DESCRIPTION"] = "Модуль добавляет в 
 карточку сделки в CRM гибкую вкладку с табличным представлением данных из поль
 зовательской сущности (ORM или HL-блока)";

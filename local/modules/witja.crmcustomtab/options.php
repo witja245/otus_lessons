@@ -28,6 +28,15 @@ $aTabsStatic = [
         'TITLE' => Loc::getMessage('CONFIG_TITLE'),
         'OPTIONS' => [
             [
+                'CRM_ENITY_TAB_NAME',
+                Loc::getMessage('CRM_ENITY_TAB_NAME'),
+                '',
+                [
+                    'text',
+                    30
+                ]
+            ],
+            [
                 'CRM_ENITY_TYPE_ID',
                 Loc::getMessage('CRM_ENITY_TYPE_ID'),
                 \CCrmOwnerType::Contact,
