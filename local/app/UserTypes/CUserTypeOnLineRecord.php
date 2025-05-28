@@ -72,8 +72,9 @@ class CUserTypeOnLineRecord
         $strResult = '';
 
         foreach ($procedures as $procedure) {
-            $strResult .= '<a href="javascript:void(0)" onclick="openFormPopup(' . $procedure['ID'] . ')">' . $procedure['NAME'] . '</a><br>';
+            $strResult .= '<a href="javascript:void(0)" onclick="openFormPopup(' . $procedure['ID'] . ', ' . $arProperty['ELEMENT_ID'] . ')">' . $procedure['NAME'] . '</a><br>';
         }
+
         $formstr  = '';
         $formstr .= '<br/><h1 class="text-center">Онлайн запись</h1><br/>';
         $formstr .= '<div class="result" style="color:red"></div><br/>';
@@ -83,7 +84,7 @@ class CUserTypeOnLineRecord
 
         $strResult .= "
         <script>
-    function openFormPopup(procedureId) {
+    function openFormPopup(procedureId, doctorsId) {
         var authPopup = BX.PopupWindowManager.create('FormPopup', null, {
             autoHide: true,
             width: 300, // ширина окна
@@ -108,11 +109,10 @@ class CUserTypeOnLineRecord
                         click: function () {
                             let name = document.getElementById('name').value;
                             let data = document.getElementById('data').value;
-                            let doctorsId = document.getElementById('doctorsId').value;
-                            console.log(name)
-                            console.log(data)
-                            console.log(doctorsId)
-                            console.log(procedureId)
+                            console.log('name='+name)
+                            console.log('data='+data)
+                            console.log('doctorsId='+doctorsId)
+                            console.log('procedureId='+procedureId)
                             BX.ajax({
                                 url: '/ajax/onlineRecordingAjax.php',
                                 method: 'POST',
