@@ -1,4 +1,8 @@
 <?php
+
+include_once __DIR__ . '/classes/BXHelper.php';
+
+
 if (filectime($_SERVER["DOCUMENT_ROOT"]."/local/php_interface/vendor/autoload.php")){
     require_once($_SERVER["DOCUMENT_ROOT"]."/local/php_interface/vendor/autoload.php");
 }
@@ -18,3 +22,37 @@ function pr($var, $type = false) {
         print_r($var);
     echo '</pre>';
 }
+
+use Bitrix\Main\EventManager;
+
+$eventManager = EventManager::getInstance();
+
+// пользовательский тип для свойства инфоблока
+$eventManager->AddEventHandler(
+    'iblock',
+    'OnIBlockPropertyBuildList',
+    [
+        'UserTypes\IBLink', // класс обработчик пользовательского типа свойства
+        'GetUserTypeDescription'
+    ]
+);
+
+$eventManager->AddEventHandler(
+    'iblock',
+    'OnIBlockPropertyBuildList',
+    [
+        'UserTypes\CUserTypeOnLineRecord', // класс обработчик пользовательского типа свойства
+        'GetUserTypeDescription'
+    ]
+);
+
+
+// пользовательский тип для UF поля
+$eventManager->AddEventHandler(
+    'main',
+    'OnUserTypeBuildList',
+    [
+        'UserTypes\FormatTelegramLink', // класс обработчик пользовательского типа UF поля
+        'GetUserTypeDescription'
+    ]
+);
