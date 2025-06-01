@@ -209,7 +209,7 @@ class witja_crmcustomtab extends CModule
             'onEntityDetailsTabsInitialized',
             $this->MODULE_ID,
             '\\Witja\\Crmcustomtab\\Crm\\Handlers',
-            'updateTabs'
+            'updateContactsTabs'
         );
     }
     public function InstallAgents()

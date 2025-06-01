@@ -56,3 +56,11 @@ $eventManager->AddEventHandler(
         'GetUserTypeDescription'
     ]
 );
+
+\Bitrix\Main\UI\Extension::load([
+//    'aholin_crmcustomtab.useless_extensions.greeting-message',
+    'dev_helper.log_events',
+//    'ajax.all_ajax_handler',
+//    'otus_crm.negative_currency',
+    'homework.begin_date_button',
+]);
