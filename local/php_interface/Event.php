@@ -1,17 +1,25 @@
 <?php
-AddEventHandler("iblock", "OnAfterIBlockElementUpdate", Array("MyClass", "OnAfterIBlockElementUpdateHandler"));
+AddEventHandler("iblock", "OnAfterIBlockElementUpdate", array("MyClass", "OnAfterIBlockElementUpdateHandler"));
+
 class MyClass
 {
     // создаем обработчик события "OnAfterIBlockElementUpdate"
     public static function OnAfterIBlockElementUpdateHandler(&$arFields)
     {
+        foreach ($arFields['PROPERTY_VALUES']['84'] as $arField) {
+            $amount = $arField;
+        }
 
-        $entityId = intval($arFields['PROPERTY_VALUES']['83']['177']['VALUE']);
+        foreach ($arFields['PROPERTY_VALUES']['83'] as $el) {
+            $entityId = $el;
+        }
+
+
         $entityFields = [
-            // Отметим сделку выполненной
-            'OPPORTUNITY'   => (int)$arFields['PROPERTY_VALUES']['84']['178'],
-            'ASSIGNED_BY_ID'   => intval($arFields['PROPERTY_VALUES']['85']),
+            'OPPORTUNITY' => intval($amount),
+            'ASSIGNED_BY_ID' => intval($arFields['PROPERTY_VALUES']['85']),
         ];
+
         $entityObject = new \CCrmDeal(true);
         $isUpdateSuccess = $entityObject->Update(
             $entityId,
@@ -19,8 +27,7 @@ class MyClass
             $bCompare = true,
             $bUpdateSearch = true,
         );
-        if ( !$isUpdateSuccess )
-        {
+        if (!$isUpdateSuccess) {
             echo $entityObject->LAST_ERROR;
             return false;
         }
@@ -28,7 +35,9 @@ class MyClass
 }
 
 AddEventHandler("crm", "OnAfterCrmDealUpdate", "MyOnAfterCrmDealUpdate");
-function MyOnAfterCrmDealUpdate($arFields){
+function MyOnAfterCrmDealUpdate($arFields)
+{
+
     $arFilter = [
         'IBLOCK_ID' => 22, // ID инфоблока
         'PROPERTY_DEAL' => $arFields["ID"] // Название свойства и его значение
@@ -50,15 +59,17 @@ function MyOnAfterCrmDealUpdate($arFields){
     if (!empty($fields)) {
         $el = new CIBlockElement;
         $PROP = array();
-
+        if (!empty($arFields['OPPORTUNITY_ACCOUNT'])) {
+            $PROP['84'] = intval($arFields['OPPORTUNITY_ACCOUNT']);  // свойству Сумма
+        }
         $PROP['83'] = intval($arFields['ID']);  // свойству Сумма
-        $PROP['84'] = intval($arFields['OPPORTUNITY']);  // свойству Сумма
+
         $PROP['85'] = intval($arFields['ASSIGNED_BY_ID']);        // свойству Ответственный
 
-        $arLoadProductArray = Array(
-            "MODIFIED_BY"    => 1, // элемент изменен текущим пользователем
+        $arLoadProductArray = array(
+            "MODIFIED_BY" => 1, // элемент изменен текущим пользователем
             "IBLOCK_SECTION" => false,          // элемент лежит в корне раздела
-            "PROPERTY_VALUES"=> $PROP,
+            "PROPERTY_VALUES" => $PROP,
 
         );
 
