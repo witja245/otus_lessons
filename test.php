@@ -3,45 +3,23 @@ declare(strict_types=1);
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 use Bitrix\Crm\CompanyTable;
 use Bitrix\Main\Entity\ReferenceField;
-$arSelect = ["ID", "NAME", "IBLOCK_ID"];
-$arFilter = ["IBLOCK_ID"=>(int)21, "ID"=> (int)83];
-$res = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
-$ob = $res->GetNextElement();
-if ($ob)
-{
-    $fields = $ob->GetFields(); // указанные в $arSelect поля
-    pr($fields);
-    $properties = $ob->GetProperties();
-    pr($properties);
-}
-die();
-$entityResult = \CCrmCompany::GetListEx(
-    [
-        'SOURCE_ID' => 'DESC'
-    ],
-    [
-        "ID" => 83
-    ],
-    false,
-    false,
-    [
-        '*'
-    ]
+
+$el = new CIBlockElement;
+$PROP = array();
+
+$PROP['83'] = 1;  // свойству Сумма
+$PROP['84'] = 100;  // свойству Сумма
+$PROP['85'] = 1;        // свойству Ответственный
+$arLoadProductArray = Array(
+    "MODIFIED_BY"    => 1, // элемент изменен текущим пользователем
+    "IBLOCK_SECTION" => false,          // элемент лежит в корне раздела
+    "PROPERTY_VALUES"=> $PROP,
+
 );
+$PRODUCT_ID = 85;  // изменяем элемент с кодом (ID) 2
+$res = $el->Update($PRODUCT_ID, $arLoadProductArray);
 
-while( $entity = $entityResult->fetch() )
-{
-    /**
-     * [ 'ID' => ..., 'TITLE' => ... ]
-     * @var array
-     */
-    pr($entity);
-}
-
-
-
-
-
+pr($res);
 
 
 
