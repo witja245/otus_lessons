@@ -9,7 +9,7 @@ use Bitrix\Main\Localization\Loc;
 Loc::loadMessages(__FILE__);
 class Handlers
 {
-    public static function updateTabs(Event $event): EventResult
+    public static function updateContactsTabs(Event $event): EventResult
     {
         $entityTypeId = $event->getParameter('entityTypeID');
         $entityId = $event->getParameter('entityID');

@@ -121,6 +121,8 @@ class CUserTypeOnLineRecord
                                     var data = JSON.parse(result);
                                     if (data.success) {
                                         alert(data.message);
+                                        authPopup.close();
+                                        
                                     }
                                     if (data.errors) {
                                         document.querySelector('.result').textContent = data.message;

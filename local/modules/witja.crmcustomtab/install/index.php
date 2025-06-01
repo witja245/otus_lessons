@@ -192,10 +192,10 @@ class witja_crmcustomtab extends CModule
 
         $eventManager->registerEventHandler(
             'crm',
-            'onEntityContactTabsInitialized',
+            'onEntityDetailsTabsInitialized',
             $this->MODULE_ID,
             '\\Witja\\Crmcustomtab\\Crm\\Handlers',
-            'updateTabs'
+            'updateContactsTabs'
         );
 
     }
@@ -206,10 +206,10 @@ class witja_crmcustomtab extends CModule
 
         $eventManager->unRegisterEventHandler(
             'crm',
-            'onEntityContactTabsInitialized',
+            'onEntityDetailsTabsInitialized',
             $this->MODULE_ID,
             '\\Witja\\Crmcustomtab\\Crm\\Handlers',
-            'updateTabs'
+            'updateContactsTabs'
         );
     }
     public function InstallAgents()
