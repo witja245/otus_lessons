@@ -3,32 +3,32 @@ AddEventHandler("iblock", "OnAfterIBlockElementUpdate", array("MyClass", "OnAfte
 
 class MyClass
 {
-    // создаем обработчик события "OnAfterIBlockElementUpdate"
     public static function OnAfterIBlockElementUpdateHandler(&$arFields)
     {
-        foreach ($arFields['PROPERTY_VALUES']['84'] as $arField) {
-            $amount = $arField;
+
+        foreach ($arFields['PROPERTY_VALUES']['83'] as $dealsId) {
+            $Id = intval($dealsId['VALUE']);
+
+        }
+        foreach ($arFields['PROPERTY_VALUES']['84'] as $ammount) {
+            $summ = $ammount;
         }
 
-        foreach ($arFields['PROPERTY_VALUES']['83'] as $el) {
-            $entityId = $el;
-        }
-
-
-        $entityFields = [
-            'OPPORTUNITY' => intval($amount),
+        $dealId = $Id; // ID сделки
+        $newAmount = $summ; // Новая сумма
+        $arField =  [
+            'OPPORTUNITY' => $newAmount,
             'ASSIGNED_BY_ID' => intval($arFields['PROPERTY_VALUES']['85']),
+            'CURRENCY_ID' => 'RUB' // Указываем валюту
         ];
 
-        $entityObject = new \CCrmDeal(true);
-        $isUpdateSuccess = $entityObject->Update(
-            $entityId,
-            $entityFields,
-            $bCompare = true,
-            $bUpdateSearch = true,
+        $deal = new CCrmDeal(true);
+        $result = $deal->Update(
+            $dealId,
+            $arField
         );
-        if (!$isUpdateSuccess) {
-            echo $entityObject->LAST_ERROR;
+
+        if (!$result) {
             return false;
         }
     }
@@ -37,44 +37,42 @@ class MyClass
 AddEventHandler("crm", "OnAfterCrmDealUpdate", "MyOnAfterCrmDealUpdate");
 function MyOnAfterCrmDealUpdate($arFields)
 {
-
-    $arFilter = [
-        'IBLOCK_ID' => 22, // ID инфоблока
-        'PROPERTY_DEAL' => $arFields["ID"] // Название свойства и его значение
-    ];
-
-    $res = CIBlockElement::GetList(
-        [],
-        $arFilter,
+    $elements = CIBlockElement::GetList(
+        array(),
+        ['IBLOCK_ID' => 22, 'PROPERTY_DEAL' => $arFields['ID']],
         false,
         false,
         ['ID']
     );
 
-    while ($ob = $res->GetNextElement()) {
-        $fields['0'] = $ob->GetFields();
 
+    while($element = $elements->GetNextElement()) {
+        $fields = $element->GetFields();
+        $iblockElementId = $fields['ID'];
     }
 
-    if (!empty($fields)) {
-        $el = new CIBlockElement;
-        $PROP = array();
-        if (!empty($arFields['OPPORTUNITY_ACCOUNT'])) {
-            $PROP['84'] = intval($arFields['OPPORTUNITY_ACCOUNT']);  // свойству Сумма
-        }
-        $PROP['83'] = intval($arFields['ID']);  // свойству Сумма
+    CModule::IncludeModule('iblock');
 
-        $PROP['85'] = intval($arFields['ASSIGNED_BY_ID']);        // свойству Ответственный
 
-        $arLoadProductArray = array(
-            "MODIFIED_BY" => 1, // элемент изменен текущим пользователем
-            "IBLOCK_SECTION" => false,          // элемент лежит в корне раздела
-            "PROPERTY_VALUES" => $PROP,
+    $el = new CIBlockElement;
 
-        );
 
-        $PRODUCT_ID = intval($fields['0']['ID']);
-        $res = $el->Update($PRODUCT_ID, $arLoadProductArray);
+    $PROP = array(
+        83 => $arFields['ID'],
+        84 => $arFields['OPPORTUNITY'],
+        85 => $arFields['ASSIGNED_BY_ID'],
+    );
+
+
+    $arLoadProductArray = array(
+        'PROPERTY_VALUES' => $PROP,
+    );
+
+// Выполняем обновление
+    if ($newElement = $el->Update($iblockElementId, $arLoadProductArray)) {
+        tl('Элемент обновлен:', 'result');
+    } else {
+        tl('Ошибка:'. $el->LAST_ERROR, 'result');
+
     }
-
 }
