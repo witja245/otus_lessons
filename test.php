@@ -4,28 +4,32 @@ require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 use Bitrix\Crm\CompanyTable;
 use Bitrix\Main\Entity\ReferenceField;
 
+
+// Получение элементов
+
+CModule::IncludeModule('iblock');
+
+// Создаем объект для работы с инфоблоком
 $el = new CIBlockElement;
-$PROP = array();
 
-$PROP['83'] = 1;  // свойству Сумма
-$PROP['84'] = 100;  // свойству Сумма
-$PROP['85'] = 1;        // свойству Ответственный
-$arLoadProductArray = Array(
-    "MODIFIED_BY"    => 1, // элемент изменен текущим пользователем
-    "IBLOCK_SECTION" => false,          // элемент лежит в корне раздела
-    "PROPERTY_VALUES"=> $PROP,
-
+// Массив свойств
+$PROP = array(
+    83 => 6,
+    84 => 5,
+    85 => 3,
 );
-$PRODUCT_ID = 85;  // изменяем элемент с кодом (ID) 2
-$res = $el->Update($PRODUCT_ID, $arLoadProductArray);
 
-pr($res);
+// Массив данных для обновления
+$arLoadProductArray = array(
+    'PROPERTY_VALUES' => $PROP,
+);
 
-
-
-
-
-
+// Выполняем обновление
+if ($newElement = $el->Update(87, $arLoadProductArray)) {
+    echo "Элемент обновлен: " . $newElement;
+} else {
+    echo "Ошибка: " . $el->LAST_ERROR;
+}
 
 
 ?>

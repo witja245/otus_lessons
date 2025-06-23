@@ -37,6 +37,7 @@ class MyClass
 AddEventHandler("crm", "OnAfterCrmDealUpdate", "MyOnAfterCrmDealUpdate");
 function MyOnAfterCrmDealUpdate($arFields)
 {
+
     $elements = CIBlockElement::GetList(
         array(),
         ['IBLOCK_ID' => 22, 'PROPERTY_DEAL' => $arFields['ID']],
@@ -59,7 +60,7 @@ function MyOnAfterCrmDealUpdate($arFields)
 
     $PROP = array(
         83 => $arFields['ID'],
-        84 => $arFields['OPPORTUNITY'],
+        84 => $arFields['OPPORTUNITY_ACCOUNT'],
         85 => $arFields['ASSIGNED_BY_ID'],
     );
 
