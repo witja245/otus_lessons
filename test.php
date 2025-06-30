@@ -3,51 +3,33 @@ declare(strict_types=1);
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/header.php');
 use Bitrix\Crm\CompanyTable;
 use Bitrix\Main\Entity\ReferenceField;
-$arSelect = ["ID", "NAME", "IBLOCK_ID"];
-$arFilter = ["IBLOCK_ID"=>(int)21, "ID"=> (int)83];
-$res = CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
-$ob = $res->GetNextElement();
-if ($ob)
-{
-    $fields = $ob->GetFields(); // указанные в $arSelect поля
-    pr($fields);
-    $properties = $ob->GetProperties();
-    pr($properties);
-}
-die();
-$entityResult = \CCrmCompany::GetListEx(
-    [
-        'SOURCE_ID' => 'DESC'
-    ],
-    [
-        "ID" => 83
-    ],
-    false,
-    false,
-    [
-        '*'
-    ]
+
+
+// Получение элементов
+
+CModule::IncludeModule('iblock');
+
+// Создаем объект для работы с инфоблоком
+$el = new CIBlockElement;
+
+// Массив свойств
+$PROP = array(
+    83 => 6,
+    84 => 5,
+    85 => 3,
 );
 
-while( $entity = $entityResult->fetch() )
-{
-    /**
-     * [ 'ID' => ..., 'TITLE' => ... ]
-     * @var array
-     */
-    pr($entity);
+// Массив данных для обновления
+$arLoadProductArray = array(
+    'PROPERTY_VALUES' => $PROP,
+);
+
+// Выполняем обновление
+if ($newElement = $el->Update(87, $arLoadProductArray)) {
+    echo "Элемент обновлен: " . $newElement;
+} else {
+    echo "Ошибка: " . $el->LAST_ERROR;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 ?>
