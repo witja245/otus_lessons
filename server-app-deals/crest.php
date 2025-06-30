@@ -374,7 +374,7 @@
 			if(defined("C_REST_WEB_HOOK_URL") && !empty(C_REST_WEB_HOOK_URL))
 			{
 				$arData = [
-					'client_endpoint' => C_REST_WEB_HOOK_URL,
+					'client_endpoint' => '2fyqcy6q9y1f1swsw0mlgo4v5ds8bfph',
 					'is_web_hook'     => 'Y'
 				];
 				$isCurrData = true;

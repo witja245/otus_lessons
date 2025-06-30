@@ -6,22 +6,24 @@ if (empty($_REQUEST['event'])) {
     <div>Приложение используется как обработчик события</div>
     <?php
 }
+if ($_REQUEST['event'] === 'ONCRMACTIVITYADD') {
 
-if ($_REQUEST['event'] === 'onCrmActivityAdd') {
+    $activityId =   $_REQUEST['data']['FIELDS']['ID'];
 
-
-    $activityId = $_REQUEST['data']['fields']['ID'];
     //@ TODO реализовать получение информации о деле CRM
     $result = CRest::call(
         'crm.activity.get',
         [
-            'id' => $activityId,
+            'id' => intval($activityId),
         ],
     );
+//    $json_data2 = json_encode($result);
+//    file_put_contents('/home/c/co75635/otus/public_html/server-app-deals/data2.json', $json_data2);
+
     // @TODO если дело является звонком или сообщением, то обновить поле "Дата коммуникации"
 
     if ($result['result']['PROVIDER_TYPE_ID'] == 'CALL' || $result['result']['PROVIDER_TYPE_ID'] == 'EMAIL') {
-        $result = CRest::call(
+        $result22 = CRest::call(
             'crm.contact.update',
             [
                 'ID' => $result['result']['OWNER_ID'],
@@ -32,6 +34,9 @@ if ($_REQUEST['event'] === 'onCrmActivityAdd') {
             ],
 
         );
+
+//        $json_data3 = json_encode($result22);
+//        file_put_contents('/home/c/co75635/otus/public_html/server-app-deals/data3.json', $json_data3);
     }
 }
 
