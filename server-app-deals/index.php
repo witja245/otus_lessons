@@ -6,6 +6,8 @@ if (empty($_REQUEST['event'])) {
     <div>Приложение используется как обработчик события</div>
     <?php
 }
+//$json_data = json_encode($_REQUEST);
+//file_put_contents('/home/c/co75635/otus/public_html/server-app-deals/data.json', $json_data);
 if ($_REQUEST['event'] === 'ONCRMACTIVITYADD') {
 
     $activityId = $_REQUEST['data']['FIELDS']['ID'];
