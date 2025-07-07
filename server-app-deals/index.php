@@ -1,5 +1,5 @@
 <?php
-require_once (__DIR__.'/crest.php');
+require_once(__DIR__ . '/crest.php');
 
 if (empty($_REQUEST['event'])) {
     ?>
@@ -8,7 +8,7 @@ if (empty($_REQUEST['event'])) {
 }
 if ($_REQUEST['event'] === 'ONCRMACTIVITYADD') {
 
-    $activityId =   $_REQUEST['data']['FIELDS']['ID'];
+    $activityId = $_REQUEST['data']['FIELDS']['ID'];
 
     //@ TODO реализовать получение информации о деле CRM
     $result = CRest::call(
@@ -22,22 +22,21 @@ if ($_REQUEST['event'] === 'ONCRMACTIVITYADD') {
 
     // @TODO если дело является звонком или сообщением, то обновить поле "Дата коммуникации"
 
-    if ($result['result']['PROVIDER_TYPE_ID'] == 'CALL' || $result['result']['PROVIDER_TYPE_ID'] == 'EMAIL') {
-        $result22 = CRest::call(
-            'crm.contact.update',
-            [
-                'ID' => $result['result']['OWNER_ID'],
-                'FIELDS' => [
-                    'UF_DATE_COMMUNICATION' => date('d.m.Y H:i:s'),
+    $result22 = CRest::call(
+        'crm.contact.update',
+        [
+            'ID' => $result['result']['OWNER_ID'],
+            'FIELDS' => [
+                'UF_DATE_COMMUNICATION' => date('d.m.Y H:i:s'),
 
-                ],
             ],
+        ],
 
-        );
+    );
 
 //        $json_data3 = json_encode($result22);
 //        file_put_contents('/home/c/co75635/otus/public_html/server-app-deals/data3.json', $json_data3);
-    }
+
 }
 
 
