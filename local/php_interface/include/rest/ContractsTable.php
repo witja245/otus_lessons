@@ -1,47 +1,34 @@
 <?php
 namespace Otus\Rest;
 
-use Bitrix\Main\Localization\Loc,
-    Bitrix\Main\ORM\Data\DataManager,
-    Bitrix\Main\ORM\Fields\DateField,
-    Bitrix\Main\ORM\Fields\IntegerField,
-    Bitrix\Main\ORM\Fields\StringField,
-    Bitrix\Main\ORM\Fields\TextField,
-    Bitrix\Main\ORM\Fields\DatetimeField,
-    Bitrix\Main\ORM\Fields\FloatField,
-    Bitrix\Main\ORM\Fields\Validators\LengthValidator,
-    Bitrix\Main\ORM\Fields\Validator\Base,
-    Bitrix\Main\ORM\Fields\Validators\RegExpValidator,
-    Bitrix\Main\ORM\Fields\Relations\Reference,
-    Bitrix\Main\ORM\Fields\Relations\OneToMany,
-    Bitrix\Main\ORM\Fields\Relations\ManyToMany,
-    Bitrix\Main\Entity\Query\Join;
+use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\ORM\Data\DataManager;
+use Bitrix\Main\ORM\Fields\DateField;
+use Bitrix\Main\ORM\Fields\FloatField;
+use Bitrix\Main\ORM\Fields\IntegerField;
+use Bitrix\Main\ORM\Fields\StringField;
+use Bitrix\Main\ORM\Fields\TextField;
+use Bitrix\Main\ORM\Fields\Validators\LengthValidator;
 
-use Bitrix\Main\Entity\Event;
-use Bitrix\Main\Entity\EventResult;
-use Bitrix\Main\Entity\EntityError;
-
-
-use \Bitrix\Crm;
 /**
  * Class ContractsTable
  *
  * Fields:
  * <ul>
- * <li> ID int mandatory
- * <li> CONTACT_ID int mandatory
- * <li> NAME string(255) mandatory
- * <li> DATE_CREATE datetime mandatory
- * <li> DATE_MODIFY datetime mandatory
- * <li> CREATED_BY int mandatory
- * <li> MODIFIED_BY int mandatory
- * <li> UF_SUMMA double optional default 0.00
- * <li> UF_DATE_SIGN date optional
- * <li> UF_NUMBER string(50) optional
- * <li> UF_STATUS string(50) optional default 'активный'
+ * <li> contract_id int mandatory
+ * <li> contract_number string(20) mandatory
+ * <li> client_name string(100) mandatory
+ * <li> client_contact string(100) optional
+ * <li> contract_date date mandatory
+ * <li> start_date date optional
+ * <li> end_date date optional
+ * <li> amount double optional
+ * <li> currency string(3) optional default 'RUB'
+ * <li> status string(20) optional default 'Активный'
+ * <li> description text optional
  * </ul>
  *
- * @package Bitrix\Crm
+ * @package Bitrix\Contracts
  **/
 
 class ContractsTable extends DataManager
@@ -53,7 +40,7 @@ class ContractsTable extends DataManager
      */
     public static function getTableName()
     {
-        return 'b_crm_contracts';
+        return 'otus_contracts';
     }
 
     /**
@@ -65,103 +52,109 @@ class ContractsTable extends DataManager
     {
         return [
             new IntegerField(
-                'ID',
+                'contract_id',
                 [
                     'primary' => true,
                     'autocomplete' => true,
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_ID_FIELD'),
-                ]
-            ),
-            new IntegerField(
-                'CONTACT_ID',
-                [
-                    'required' => true,
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CONTACT_ID_FIELD'),
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CONTRACT_ID_FIELD'),
+                    'size' => 8,
                 ]
             ),
             new StringField(
-                'NAME',
+                'contract_number',
                 [
                     'required' => true,
                     'validation' => function()
                     {
                         return[
-                            new LengthValidator(null, 255),
+                            new LengthValidator(null, 20),
                         ];
                     },
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_NAME_FIELD'),
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CONTRACT_NUMBER_FIELD'),
                 ]
             ),
-            new DatetimeField(
-                'DATE_CREATE',
+            new StringField(
+                'client_name',
                 [
                     'required' => true,
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_DATE_CREATE_FIELD'),
+                    'validation' => function()
+                    {
+                        return[
+                            new LengthValidator(null, 100),
+                        ];
+                    },
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CLIENT_NAME_FIELD'),
                 ]
             ),
-            new DatetimeField(
-                'DATE_MODIFY',
+            new StringField(
+                'client_contact',
                 [
-                    'required' => true,
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_DATE_MODIFY_FIELD'),
-                ]
-            ),
-            new IntegerField(
-                'CREATED_BY',
-                [
-                    'required' => true,
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CREATED_BY_FIELD'),
-                ]
-            ),
-            new IntegerField(
-                'MODIFIED_BY',
-                [
-                    'required' => true,
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_MODIFIED_BY_FIELD'),
-                ]
-            ),
-            new FloatField(
-                'UF_SUMMA',
-                [
-                    'default' => 0.00,
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_UF_SUMMA_FIELD'),
+                    'validation' => function()
+                    {
+                        return[
+                            new LengthValidator(null, 100),
+                        ];
+                    },
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CLIENT_CONTACT_FIELD'),
                 ]
             ),
             new DateField(
-                'UF_DATE_SIGN',
+                'contract_date',
                 [
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_UF_DATE_SIGN_FIELD'),
+                    'required' => true,
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CONTRACT_DATE_FIELD'),
+                ]
+            ),
+            new DateField(
+                'start_date',
+                [
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_START_DATE_FIELD'),
+                ]
+            ),
+            new DateField(
+                'end_date',
+                [
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_END_DATE_FIELD'),
+                ]
+            ),
+            new FloatField(
+                'amount',
+                [
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_AMOUNT_FIELD'),
                 ]
             ),
             new StringField(
-                'UF_NUMBER',
+                'currency',
                 [
+                    'default' => 'RUB',
                     'validation' => function()
                     {
                         return[
-                            new LengthValidator(null, 50),
+                            new LengthValidator(null, 3),
                         ];
                     },
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_UF_NUMBER_FIELD'),
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_CURRENCY_FIELD'),
                 ]
             ),
             new StringField(
-                'UF_STATUS',
+                'status',
                 [
-                    'default' => 'активный',
+                    'default' => 'Активный',
                     'validation' => function()
                     {
                         return[
-                            new LengthValidator(null, 50),
+                            new LengthValidator(null, 20),
                         ];
                     },
-                    'title' => Loc::getMessage('CONTRACTS_ENTITY_UF_STATUS_FIELD'),
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_STATUS_FIELD'),
                 ]
             ),
-            (new Reference('CONTACT', Crm\ContactTable::class,
-                Join::on('this.CONTACT_ID', 'ref.ID')))
-                ->configureJoinType('inner'),
-
+            new TextField(
+                'description',
+                [
+                    'title' => Loc::getMessage('CONTRACTS_ENTITY_DESCRIPTION_FIELD'),
+                ]
+            ),
         ];
     }
 }

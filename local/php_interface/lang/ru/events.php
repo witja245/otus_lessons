@@ -1,2 +1,2 @@
 <?php
-$MESS["REST_SCOPE_OTUS_ORIGINALCONTACTSDATA"] = "Отус оригинальные данные";
+$MESS["REST_SCOPE_OTUS.CONTRACTS"] = "Отус оригинальные данные";
