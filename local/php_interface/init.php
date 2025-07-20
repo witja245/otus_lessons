@@ -20,14 +20,14 @@ function pr($var, $type = false) {
 }
 
 require_once ($_SERVER["DOCUMENT_ROOT"].'/local/php_interface/include/rest/events.php');
-require_once ($_SERVER["DOCUMENT_ROOT"].'/local/php_interface/include/rest/ContractsTable.php');
+require_once ($_SERVER["DOCUMENT_ROOT"].'/local/php_interface/include/rest/OriginalContactsDataTable.php');
 
 \Bitrix\Main\Loader::registerAutoLoadClasses(
     null, // Имя вашего модуля
     [
         // Класс => относительный путь от папки модуля
         'Otus\Rest\Events' => '/local/php_interface/include/rest/events.php',
-        'Otus\Rest\ContractsTable' => '/local/php_interface/include/rest/ContractsTable.php',
+        'Otus\Rest\OriginalContactsDataTable' => '/local/php_interface/include/rest/OriginalContactsDataTable.php',
 
     ]
 );

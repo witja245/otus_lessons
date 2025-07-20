@@ -22,15 +22,15 @@ class Events
      */
     public static function OnRestServiceBuildDescriptionHandler()
     {
-        Loc::getMessage('REST_SCOPE_OTUS.CONTRACTS');
+        Loc::getMessage('REST_SCOPE_OTUS.ORIGINALCONTACTSDATA');
 
 
         return [
-            'otus.contracts' => [
-                'otus.contracts.add' => [__CLASS__, 'add'],
-                'otus.contracts.list' => [__CLASS__, 'list'],
-                'otus.contracts.update' => [__CLASS__, 'update'],
-                'otus.contracts.delete' => [__CLASS__, 'delete'],
+            'otus.originalcontactsdata' => [
+                'otus.originalcontactsdata.add' => [__CLASS__, 'add'],
+                'otus.originalcontactsdata.list' => [__CLASS__, 'list'],
+                'otus.originalcontactsdata.update' => [__CLASS__, 'update'],
+                'otus.originalcontactsdata.delete' => [__CLASS__, 'delete'],
 //                \CRestUtil::EVENTS => [
 //                    //код в списке событий
 //                    'onAfterOOCDAdd' => [
@@ -57,12 +57,12 @@ class Events
 //        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'NAV: '.var_export($navStart, true).PHP_EOL, FILE_APPEND);
 //        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'SERVER: '.var_export($server, true).PHP_EOL, FILE_APPEND);
 
-        $originDataStoreResult = ContractsTable::add($arParams);
+        $originDataStoreResult = OriginalContactsDataTable::add($arParams);
         if ($originDataStoreResult->isSuccess())
         {
             $id = $originDataStoreResult->getId();
             $arParams['ID'] = $id;
-            $event = new Event('main', 'onAfterOtusContractsAdd', $arParams);
+            $event = new Event('main', 'onAfterOtusOriginalContactsDataAdd', $arParams);
             $event->send();
 
             return $id;
