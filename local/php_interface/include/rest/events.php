@@ -44,13 +44,56 @@ class Events
     }
 
     /**
-     * Add element
+     * list element
      * @param $arParams - request params
      * @param $navStart - default start parameter (START from POST-data)
      * @param \CRestServer $server - server data
      * @return mixed
      * @throws RestException
      */
+    public static function list ($arParams, $navStart, \CRestServer $server)
+    {
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'PARAMS: '.var_export($arParams, true).PHP_EOL, FILE_APPEND);
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'NAV: '.var_export($navStart, true).PHP_EOL, FILE_APPEND);
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'SERVER: '.var_export($server, true).PHP_EOL, FILE_APPEND);
+
+        $originDataStoreResult = OriginalContactsDataTable::getList($arParams);
+        $resul = $originDataStoreResult->fetchall();
+
+        return $resul;
+    }
+
+    public static function update ($arParams, $navStart, \CRestServer $server)
+    {
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'PARAMS: '.var_export($arParams, true).PHP_EOL, FILE_APPEND);
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'NAV: '.var_export($navStart, true).PHP_EOL, FILE_APPEND);
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'SERVER: '.var_export($server, true).PHP_EOL, FILE_APPEND);
+
+        $result = OriginalContactsDataTable::update($arParams['ID'], $arParams);
+
+        if ($result->isSuccess()) {
+            return "Запись c id = ".$arParams['ID']." обновлена";
+        } else {
+            return $result->getErrorMessages();
+        }
+    }
+
+    public static function delete ($arParams, $navStart, \CRestServer $server)
+    {
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'PARAMS: '.var_export($arParams, true).PHP_EOL, FILE_APPEND);
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'NAV: '.var_export($navStart, true).PHP_EOL, FILE_APPEND);
+//        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'SERVER: '.var_export($server, true).PHP_EOL, FILE_APPEND);
+
+        $result = OriginalContactsDataTable::delete($arParams['ID']);
+
+        if ($result->isSuccess()) {
+            return "Запись c id = ".$arParams['ID']." удалена";
+        } else {
+            return $result->getErrorMessages();
+        }
+    }
+
+
     public static function add ($arParams, $navStart, \CRestServer $server)
     {
 //        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/logRest.txt', 'PARAMS: '.var_export($arParams, true).PHP_EOL, FILE_APPEND);
